@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>youtube</title>
+    <style>
+        body{
+            margin:0px;
+            padding:0px;
+        }
+       #nav {
+            width: 100%;
+             height: 60px;
+            position:fixed;
+            display: flex;
+            background: red;
+       }
+       #nav ul {
+           display: flex;
+           list-style:none;
+       }
+       .youtube_text{
+           text-decoration: none;
+           font-size: 25px;
+           color:white;
+       }
+       #img_youtube{
+           width:100px;
+           height:30px;
+       }
+       #search{
+           width:200px;
+           height:30px;
+           margin-left: 300px;
+           margin-right:0px;
+           margin-top: 0px;
+       }
+       #submitbtn{
+           width: 60px;
+           height:30px;
+           background: grey;
+           border:none;
+           margin-left:0px;
+       }
+       #container {
+           display: grid;
+           /* grid-template-columns: auto auto auto auto; */
+           grid-gap: 10px;
+       }
+       #container > div{
+           display: grid;
+           margin: 50px;
+           grid-template-columns: auto auto auto;
+       }
+    </style>
+</head>
+<body>
+    <nav id="nav">
+         <ul>
+             <li> <img id="img_youtube" src="https://static.vecteezy.com/system/resources/thumbnails/003/206/623/small/youtube-editorial-app-icon-free-vector.jpg" ></li>
+               <li> <input type="text" id="search" placeholder="search"/> <input type="submit" id="submitbtn"/></li>
+              
+            </ul>
+    </nav><br/><br/><br/><br/><br/><br/>
+    <div id="container">
+
+    </div>
+   <script>
+       const submitbtn = document.getElementById('submitbtn');
+         submitbtn.addEventListener('click',loadVideo);
+
+
+
+      function loadVideo(){
+
+          const q = document.getElementById('search').value;
+        const fetchData = ({url , key}) => {
+        return fetch(`${url}key=${key}`)
+    }
+
+    fetchData(
+        {    
+            url:`https://youtube.googleapis.com/youtube/v3/search?q=${q}&`,
+            key:"AIzaSyB6iCRmoCZ0ou8uKfzgs5zW4XcMFYQIlkI&maxResults=15"
+        })
+        .then(res => res.json())
+        .then(res => handleResponse(res.items))
+
+
+        const handleResponse = (data) => {
+            const container = document.getElementById("container");
+            container.innerHTML=null;
+            const div = document.createElement("div");
+            var i = 0;
+            for(let response of data){
+                const card = createCard(response);
+                card.className = `videos${i}`;
+                 card.style.margin="30px";
+                i++;
+                 div.append(card);
+            }
+            // document.body.append(...result)
+            container.append(div);
+            container.style.gridTemplateAreas = "videoes1 videoes1 videoes1"
+        }
+
+        const createCard = ({id :{videoId}}) => {
+            const div = document.createElement("div");
+            div.innerHTML=`<iframe 
+            
+             src="https://www.youtube.com/embed/${videoId}"
+             title="YouTube video player"
+             frameborder="0"
+             allow="accelerometer;
+             autoplay; clipboard-write; 
+             encrypted-media; 
+             gyroscope; 
+             picture-in-picture"
+              allowfullscreen></iframe>`
+             
+            return div
+        }
+      }
+   </script>
+</body>
+</html>
