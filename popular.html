@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popular Video</title>
+    <style>
+        body{
+            background: black;
+        }
+        #container{
+            width: 300px;
+            margin-left: 100px;
+             display: grid;
+             grid-template-columns: auto auto ;
+        }
+           #container div {
+               margin-left: 30px;
+           }      
+    </style>
+</head>
+<body>
+    <div id="container">
+
+    </div>
+    <script>
+     
+
+         let videos = document.getElementById('container');
+        async function video(){
+         let data =  await fetch(`https://youtube.googleapis.com/youtube/v3/search?chart=mostPopular&q=india&part=snippet&key=AIzaSyB6iCRmoCZ0ou8uKfzgs5zW4XcMFYQIlkI&_maxResults=10`)
+           let item  =  await data.json();
+           console.log(item);
+
+           let {items} = item;
+           
+           items.forEach(({id: {videoId}}) => {
+                   let div = document.createElement('div');
+                   div.style.marginTop="20px";
+                   div.innerHTML =`<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                   videos.append(div);
+               });
+
+        }
+
+        video();
+    </script>
+</body>
+</html>
